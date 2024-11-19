@@ -97,6 +97,32 @@ def get_monthly_report():
     return jsonify(report), 200
 
 
+@app.route('/expenses/search', methods=['GET'])
+def search_expenses():
+    category = request.args.get('category')
+    description = request.args.get('description')
+    start_date = request.args.get('start_date')  # Format: YYYY-MM-DD
+    end_date = request.args.get('end_date')      # Format: YYYY-MM-DD
+
+    # Build the query
+    query = Expense.query
+    if category:
+        query = query.filter(Expense.category.ilike(f"%{category}%"))
+    if description:
+        query = query.filter(Expense.description.ilike(f"%{description}%"))
+    if start_date and end_date:
+        query = query.filter(Expense.date.between(start_date, end_date))
+
+    # Execute the query
+    expenses = query.all()
+    expenses_list = [{
+        "id": e.id,
+        "amount": e.amount,
+        "category": e.category,
+        "description": e.description,
+        "date": e.date.strftime('%Y-%m-%d %H:%M:%S')
+    } for e in expenses]
+    return jsonify(expenses_list), 200
 
 
 

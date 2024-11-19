@@ -118,6 +118,27 @@ async function fetchMonthlyReport() {
     });
 }
 
+// Search
+document.getElementById('searchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const category = document.getElementById('searchCategory').value;
+    const description = document.getElementById('searchDescription').value;
+    const startDate = document.getElementById('searchStartDate').value;
+    const endDate = document.getElementById('searchEndDate').value;
+
+    const params = new URLSearchParams({ category, description, start_date: startDate, end_date: endDate });
+    const response = await fetch(`/expenses/search?${params}`);
+    const results = await response.json();
+
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+    results.forEach(expense => {
+        const li = document.createElement('li');
+        li.textContent = `${expense.category}: $${expense.amount} (${expense.description || 'No description'})`;
+        searchResults.appendChild(li);
+    });
+});
 
 
 
