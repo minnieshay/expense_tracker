@@ -52,6 +52,7 @@ def update_expense(id):
     if not expense:
         return jsonify({"error": "Expense not found"}), 404
 
+# Update expense fields
     expense.amount = data.get('amount', expense.amount)
     expense.category = data.get('category', expense.category)
     expense.description = data.get('description', expense.description)

@@ -44,3 +44,34 @@ ul li {
     display: flex;
     justify-content: space-between;
 }
+
+/* Modal styling */
+.modal {
+    display: none; /* Default is hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+.modal.show {
+    display: block !important; /* Use this class to show the modal */
+}
+
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal button {
+    margin-top: 10px;
+}
+
+.modal.hidden {
+    display: none;
+}
