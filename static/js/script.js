@@ -88,6 +88,7 @@ async function deleteExpense(id) {
     fetchExpenses();
 }
 
+// Category Summary
 async function fetchCategorySummary() {
     const response = await fetch('/expenses/summary');
     const summary = await response.json();
@@ -102,7 +103,42 @@ async function fetchCategorySummary() {
     });
 }
 
+// Monthly Report
+async function fetchMonthlyReport() {
+    const response = await fetch('/expenses/reports');
+    const report = await response.json();
 
+    const reportContainer = document.getElementById('monthlyReport');
+    reportContainer.innerHTML = ''; // Clear previous reports
+
+    report.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = `${item.month}: $${item.total.toFixed(2)}`;
+        reportContainer.appendChild(div);
+    });
+}
+
+// Search
+document.getElementById('searchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const category = document.getElementById('searchCategory').value;
+    const description = document.getElementById('searchDescription').value;
+    const startDate = document.getElementById('searchStartDate').value;
+    const endDate = document.getElementById('searchEndDate').value;
+
+    const params = new URLSearchParams({ category, description, start_date: startDate, end_date: endDate });
+    const response = await fetch(`/expenses/search?${params}`);
+    const results = await response.json();
+
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+    results.forEach(expense => {
+        const li = document.createElement('li');
+        li.textContent = `${expense.category}: $${expense.amount} (${expense.description || 'No description'})`;
+        searchResults.appendChild(li);
+    });
+});
 
 
 
@@ -129,4 +165,6 @@ async function fetchCategorySummary() {
 // Load expenses on page load
 fetchExpenses();
 fetchCategorySummary();
+fetchMonthlyReport();
+
 
