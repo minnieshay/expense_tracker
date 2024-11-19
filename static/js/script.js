@@ -88,6 +88,7 @@ async function deleteExpense(id) {
     fetchExpenses();
 }
 
+// Category Summary
 async function fetchCategorySummary() {
     const response = await fetch('/expenses/summary');
     const summary = await response.json();
@@ -102,6 +103,20 @@ async function fetchCategorySummary() {
     });
 }
 
+// Monthly Report
+async function fetchMonthlyReport() {
+    const response = await fetch('/expenses/reports');
+    const report = await response.json();
+
+    const reportContainer = document.getElementById('monthlyReport');
+    reportContainer.innerHTML = ''; // Clear previous reports
+
+    report.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = `${item.month}: $${item.total.toFixed(2)}`;
+        reportContainer.appendChild(div);
+    });
+}
 
 
 
@@ -129,4 +144,6 @@ async function fetchCategorySummary() {
 // Load expenses on page load
 fetchExpenses();
 fetchCategorySummary();
+fetchMonthlyReport();
+
 

@@ -84,6 +84,17 @@ def get_expenses_summary():
     return jsonify(summary), 200
 
 
+@app.route('/expenses/reports', methods=['GET'])
+def get_monthly_report():
+    # Group expenses by year and month
+    results = db.session.query(
+        db.func.strftime('%Y-%m', Expense.date).label('month'),
+        db.func.sum(Expense.amount).label('total')
+    ).group_by('month').order_by('month').all()
+
+    # Prepare a monthly report response
+    report = [{"month": result[0], "total": result[1]} for result in results]
+    return jsonify(report), 200
 
 
 
