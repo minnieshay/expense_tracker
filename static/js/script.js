@@ -82,12 +82,51 @@ editForm.addEventListener('submit', async (e) => {
     }
 });
 
-
 // Delete an expense
 async function deleteExpense(id) {
     await fetch(`/expenses/${id}`, { method: 'DELETE' });
     fetchExpenses();
 }
 
+async function fetchCategorySummary() {
+    const response = await fetch('/expenses/summary');
+    const summary = await response.json();
+
+    const summaryContainer = document.getElementById('categorySummary');
+    summaryContainer.innerHTML = ''; // Clear previous summary
+
+    summary.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = `${item.category}: $${item.total.toFixed(2)}`;
+        summaryContainer.appendChild(div);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Load expenses on page load
 fetchExpenses();
+fetchCategorySummary();
+

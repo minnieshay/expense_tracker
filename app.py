@@ -70,5 +70,48 @@ def delete_expense(id):
     db.session.commit()
     return jsonify({"message": "Expense deleted successfully!"}), 200
 
+
+@app.route('/expenses/summary', methods=['GET'])
+def get_expenses_summary():
+    # Query all expenses grouped by category and calculate totals
+    results = db.session.query(
+        Expense.category,
+        db.func.sum(Expense.amount).label('total')
+    ).group_by(Expense.category).all()
+
+    # Prepare a summary response
+    summary = [{"category": result[0], "total": result[1]} for result in results]
+    return jsonify(summary), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
